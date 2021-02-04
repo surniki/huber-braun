@@ -6,9 +6,9 @@
   (dV-wrt-dt      (/ (- (- I-leak) I-Na I-K I-sd I-sr I-inj I-coupling) C))         ;; checked
   (d-a-K-wrt-dt   (* (/ phi tau-K) (- a-K-inf a-K)))                                ;; checked
   (d-a-sd-wrt-dt  (* (/ phi tau-sd) (- a-sd-inf a-sd)))                             ;; checked
-  (d-a-sr-wrt-dt  (* -1.0 (/ phi tau-sr) (+ (* v-acc I-sd) (* v-dep a-sr))))        ;; checked
+  (d-a-sr-wrt-dt  (* (- (/ phi tau-sr)) (+ (* v-acc I-sd) (* v-dep a-sr))))         ;; checked
   (I-leak         (* g-leak (- V V-leak)))                                          ;; checked
-  (a-Na           (/ 1.0 (+ 1.0 (exp (* -1.0 s-Na (- V V-0Na))))))                  ;; checked
+  (a-Na           (/ 1.0 (+ 1.0 (exp (* (- s-Na) (- V V-0Na))))))                   ;; checked
   (I-Na           (* rho g-Na a-Na (- V V-Na)))                                     ;; checked
   (I-K            (* rho g-K a-K (- V V-K)))                                        ;; checked
   (I-sd           (* rho g-sd a-sd (- V V-sd)))                                     ;; checked
@@ -86,7 +86,7 @@
 			   :edges (list (edge :tail 'n1 :head 'n2 :value g-c)
 					(edge :tail 'n2 :head 'n1 :value g-c)))))
     (with-open-model-digraph (network)
-      (loop :repeat (/ 1000 0.01)
+      (loop :repeat (/ 5000 0.01)
 	    :do
 	       (output-model-digraph-state network)
 	       (update-model-digraph network)
